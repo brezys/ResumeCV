@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { Mail, Github, Linkedin, Globe, Copy, Check, ExternalLink } from 'lucide-react'
+import { Mail, Github, Linkedin, Globe, Copy, Check, ExternalLink, FileText } from 'lucide-react'
 
 const Contact = () => {
   const [ref, inView] = useInView({
@@ -118,114 +118,133 @@ const Contact = () => {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
-            {/* Contact Information */}
-            <motion.div variants={itemVariants} className="space-y-8">
-              <div>
-                <h3 className="text-2xl font-semibold mb-6">Get In Touch</h3>
-                <div className="space-y-4">
-                  {contactInfo.map((contact, index) => (
-                    <div key={index} className="relative">
-                      {contact.copyable ? (
-                        <motion.div
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          className="flex items-center space-x-4 p-4 bg-dark-card rounded-xl border border-dark-border hover:border-accent transition-all duration-300 group card-glow"
-                        >
-                          {contact.icon}
-                          <div className="flex-1">
-                            <p className="text-sm text-gray-400">{contact.label}</p>
-                            <p className="text-white group-hover:text-accent transition-colors duration-300">
-                              {contact.value}
-                            </p>
-                          </div>
-                          <motion.button
-                            onClick={copyEmailToClipboard}
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            className="p-2 bg-accent hover:bg-accent-hover rounded-lg transition-colors duration-300"
-                            title={emailCopied ? "Email copied!" : "Copy email address"}
+          <div className="space-y-12 max-w-6xl mx-auto">
+            {/* Contact and Social Links Grid */}
+            <div className="grid md:grid-cols-2 gap-12">
+              {/* Contact Information */}
+              <motion.div variants={itemVariants} className="space-y-8">
+                <div>
+                  <h3 className="text-2xl font-semibold mb-6">Get In Touch</h3>
+                  <div className="space-y-4">
+                    {contactInfo.map((contact, index) => (
+                      <div key={index} className="relative">
+                        {contact.copyable ? (
+                          <motion.div
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            className="flex items-center space-x-4 p-4 bg-dark-card rounded-xl border border-dark-border hover:border-accent transition-all duration-300 group card-glow"
                           >
-                            {emailCopied ? (
-                              <Check className="text-white" size={20} />
-                            ) : (
-                              <Copy className="text-white" size={20} />
-                            )}
-                          </motion.button>
-                        </motion.div>
-                      ) : (
-                        <motion.a
-                          href={contact.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          className="flex items-center space-x-4 p-4 bg-dark-card rounded-xl border border-dark-border hover:border-accent transition-all duration-300 group card-glow cursor-pointer"
-                        >
-                          {contact.icon}
-                          <div className="flex-1">
-                            <p className="text-sm text-gray-400">{contact.label}</p>
-                            <p className="text-white group-hover:text-accent transition-colors duration-300">
-                              {contact.value}
-                            </p>
-                          </div>
-                          <ExternalLink className="text-gray-400 group-hover:text-accent transition-colors duration-300" size={16} />
-                        </motion.a>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-semibold mb-6">Follow Me</h3>
-                <div className="space-y-4">
-                  {socialLinks.map((social, index) => (
-                    <motion.a
-                      key={index}
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="flex items-center space-x-4 p-4 bg-dark-card rounded-xl border border-dark-border hover:border-accent transition-all duration-300 group card-glow"
-                    >
-                      <div className="text-accent">{social.icon}</div>
-                      <div>
-                        <p className="text-white group-hover:text-accent transition-colors duration-300 font-medium">
-                          {social.label}
-                        </p>
-                        <p className="text-sm text-gray-400">{social.description}</p>
+                            {contact.icon}
+                            <div className="flex-1">
+                              <p className="text-sm text-gray-400">{contact.label}</p>
+                              <p className="text-white group-hover:text-accent transition-colors duration-300">
+                                {contact.value}
+                              </p>
+                            </div>
+                            <motion.button
+                              onClick={copyEmailToClipboard}
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              className="p-2 bg-accent hover:bg-accent-hover rounded-lg transition-colors duration-300"
+                              title={emailCopied ? "Email copied!" : "Copy email address"}
+                            >
+                              {emailCopied ? (
+                                <Check className="text-white" size={20} />
+                              ) : (
+                                <Copy className="text-white" size={20} />
+                              )}
+                            </motion.button>
+                          </motion.div>
+                        ) : (
+                          <motion.a
+                            href={contact.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            className="flex items-center space-x-4 p-4 bg-dark-card rounded-xl border border-dark-border hover:border-accent transition-all duration-300 group card-glow cursor-pointer"
+                          >
+                            {contact.icon}
+                            <div className="flex-1">
+                              <p className="text-sm text-gray-400">{contact.label}</p>
+                              <p className="text-white group-hover:text-accent transition-colors duration-300">
+                                {contact.value}
+                              </p>
+                            </div>
+                            <ExternalLink className="text-gray-400 group-hover:text-accent transition-colors duration-300" size={16} />
+                          </motion.a>
+                        )}
                       </div>
-                      <ExternalLink className="text-gray-400 group-hover:text-accent transition-colors duration-300 ml-auto" size={16} />
-                    </motion.a>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
 
-            {/* Call to Action */}
-            <motion.div variants={itemVariants} className="space-y-8">
-              <div className="bg-gradient-to-br from-dark-card to-dark-border p-8 rounded-xl border border-dark-border h-fit">
-                <h3 className="text-2xl font-semibold mb-6">Are you looking for an intern?</h3>
-                <div className="space-y-4">
+              {/* Social Links */}
+              <motion.div variants={itemVariants} className="space-y-8">
+                <div>
+                  <h3 className="text-2xl font-semibold mb-6">Follow Me</h3>
+                  <div className="space-y-4">
+                    {socialLinks.map((social, index) => (
+                      <motion.a
+                        key={index}
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="flex items-center space-x-4 p-4 bg-dark-card rounded-xl border border-dark-border hover:border-accent transition-all duration-300 group card-glow"
+                      >
+                        <div className="text-accent">{social.icon}</div>
+                        <div>
+                          <p className="text-white group-hover:text-accent transition-colors duration-300 font-medium">
+                            {social.label}
+                          </p>
+                          <p className="text-sm text-gray-400">{social.description}</p>
+                        </div>
+                        <ExternalLink className="text-gray-400 group-hover:text-accent transition-colors duration-300 ml-auto" size={16} />
+                      </motion.a>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Resume & Status Section - Full Width */}
+            <motion.div variants={itemVariants}>
+              <div className="bg-dark-card p-6 rounded-xl border border-dark-border">
+                <h4 className="text-2xl font-semibold mb-6">My Resume & Status</h4>
+                <div className="space-y-6">
                   <p className="text-gray-300 leading-relaxed">
                     I'm actively seeking software engineering internship opportunities and would love to contribute to meaningful projects.
                   </p>
-                </div>
-              </div>
+                  
+                  <motion.a
+                    href="/NICK BREZINSKI TECHNICAL RESUME.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="flex items-center space-x-4 p-4 bg-gradient-to-r from-accent to-accent-hover rounded-xl hover:from-accent-hover hover:to-accent transition-all duration-300 group max-w-md"
+                  >
+                    <FileText className="text-white" size={24} />
+                    <div className="flex-1">
+                      <p className="text-white font-medium">Download Resume</p>
+                      <p className="text-white/80 text-sm">View my technical skills and experience</p>
+                    </div>
+                    <ExternalLink className="text-white/80 group-hover:text-white transition-colors duration-300" size={16} />
+                  </motion.a>
 
-              <div className="bg-dark-card p-6 rounded-xl border border-dark-border h-fit">
-                <h4 className="text-2xl font-semibold mb-6">Current Status</h4>
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                    <span className="text-green-400 font-medium">Available for Opportunities</span>
+                  <div className="pt-4 border-t border-dark-border">
+                    <div className="flex items-center space-x-2 mb-3">
+                      <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                      <span className="text-green-400 font-medium">Available for Opportunities</span>
+                    </div>
+                    <p className="text-gray-400 text-sm">
+                      Currently seeking software engineering opportunities and collaborative projects. 
+                      Graduated May 2025.
+                    </p>
                   </div>
-                  <p className="text-gray-400 text-sm">
-                    Currently seeking software engineering opportunities and collaborative projects. 
-                    Graduated May 2025.
-                  </p>
                 </div>
               </div>
             </motion.div>
