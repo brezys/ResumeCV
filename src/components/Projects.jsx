@@ -413,7 +413,7 @@ const Projects = () => {
             >
               <h3 className="text-2xl font-semibold mb-4">Want to see more?</h3>
               <p className="text-gray-300 mb-6">
-                Click on any project above to dive deep into the technical details, challenges, and solutions.
+                Click on any project above to learn more about the technical details and challenges associated with each project.
               </p>
               <motion.button
                 whileHover={{ scale: 1.05 }}
