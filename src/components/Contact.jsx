@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { Mail, Phone, MapPin, Github, Linkedin, Globe, ArrowUpRight, Copy, Check } from 'lucide-react'
+import { Mail, Phone, MapPin, Github, Linkedin, Globe, ArrowUpRight, Copy, Check, ExternalLink } from 'lucide-react'
 
 const Contact = () => {
   const [ref, inView] = useInView({
@@ -10,6 +10,7 @@ const Contact = () => {
   })
 
   const [emailCopied, setEmailCopied] = useState(false)
+  const [emailClickFeedback, setEmailClickFeedback] = useState('')
 
   const email = "nicholashbrezinski@gmail.com"
   const subject = "Hello from your portfolio website!"
@@ -17,21 +18,70 @@ const Contact = () => {
   
   const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
 
-  const copyEmailToClipboard = async () => {
+  const copyEmailToClipboard = async (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
     try {
-      await navigator.clipboard.writeText(email)
-      setEmailCopied(true)
-      setTimeout(() => setEmailCopied(false), 2000)
+      // Try modern clipboard API first
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(email)
+        setEmailCopied(true)
+        setTimeout(() => setEmailCopied(false), 2000)
+        return
+      }
+      
+      // Fallback for older browsers or non-HTTPS
+      const textArea = document.createElement('textarea')
+      textArea.value = email
+      textArea.style.position = 'fixed'
+      textArea.style.left = '-999999px'
+      textArea.style.top = '-999999px'
+      document.body.appendChild(textArea)
+      textArea.focus()
+      textArea.select()
+      
+      try {
+        document.execCommand('copy')
+        setEmailCopied(true)
+        setTimeout(() => setEmailCopied(false), 2000)
+      } catch (err) {
+        console.error('Fallback copy failed:', err)
+        // Show the email in an alert as last resort
+        alert(`Copy this email address: ${email}`)
+      } finally {
+        document.body.removeChild(textArea)
+      }
     } catch (err) {
       console.error('Failed to copy email:', err)
+      // Show the email in an alert as last resort
+      alert(`Copy this email address: ${email}`)
     }
   }
 
   const handleEmailClick = (e) => {
-    // Try to open default email client
-    window.location.href = mailtoUrl
+    e.preventDefault()
     
-    // If that doesn't work, the user can use the copy button as fallback
+    try {
+      // Try to open mailto link
+      const link = document.createElement('a')
+      link.href = mailtoUrl
+      link.click()
+      
+      // Provide user feedback
+      setEmailClickFeedback('Trying to open your email client...')
+      setTimeout(() => {
+        setEmailClickFeedback('No email client? Copy the email address above!')
+      }, 3000)
+      setTimeout(() => {
+        setEmailClickFeedback('')
+      }, 8000)
+      
+    } catch (err) {
+      console.error('Email click failed:', err)
+      setEmailClickFeedback('Please copy the email address and paste it into your email client')
+      setTimeout(() => setEmailClickFeedback(''), 5000)
+    }
   }
 
   const contactInfo = [
@@ -114,7 +164,7 @@ const Contact = () => {
                         onClick={contact.onClick}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="flex items-center space-x-4 p-4 bg-dark-card rounded-xl border border-dark-border hover:border-accent transition-all duration-300 group card-glow"
+                        className="flex items-center space-x-4 p-4 bg-dark-card rounded-xl border border-dark-border hover:border-accent transition-all duration-300 group card-glow cursor-pointer"
                       >
                         {contact.icon}
                         <div className="flex-1">
@@ -132,8 +182,8 @@ const Contact = () => {
                           onClick={copyEmailToClipboard}
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
-                          className="absolute top-2 right-2 p-2 bg-dark-border hover:bg-accent rounded-lg transition-colors duration-300 group"
-                          title="Copy email address"
+                          className="absolute top-2 right-10 p-2 bg-dark-border hover:bg-accent rounded-lg transition-colors duration-300 group"
+                          title={emailCopied ? "Email copied!" : "Copy email address"}
                         >
                           {emailCopied ? (
                             <Check className="text-green-400" size={16} />
@@ -144,6 +194,17 @@ const Contact = () => {
                       )}
                     </div>
                   ))}
+                  
+                  {/* Email feedback */}
+                  {emailClickFeedback && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-3 bg-accent/20 border border-accent rounded-lg"
+                    >
+                      <p className="text-accent text-sm">{emailClickFeedback}</p>
+                    </motion.div>
+                  )}
                 </div>
               </div>
 
@@ -184,15 +245,14 @@ const Contact = () => {
                 </p>
                 
                 <div className="space-y-4">
-                  <motion.a
-                    href={mailtoUrl}
+                  <motion.button
                     onClick={handleEmailClick}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="block w-full bg-accent hover:bg-accent-hover text-white text-center px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-accent/25"
                   >
                     Send Me an Email
-                  </motion.a>
+                  </motion.button>
                   
                   <motion.a
                     href="https://linkedin.com/in/nicholas-brezinski"
@@ -200,18 +260,44 @@ const Contact = () => {
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="block w-full border border-gray-600 hover:border-white text-white text-center px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:bg-white hover:text-black"
+                    className="flex items-center justify-center space-x-2 w-full border border-gray-600 hover:border-white text-white text-center px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:bg-white hover:text-black"
                   >
-                    Connect on LinkedIn
+                    <span>Connect on LinkedIn</span>
+                    <ExternalLink size={16} />
                   </motion.a>
+                  
+                  {/* Manual email option */}
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    className="flex items-center justify-between w-full border border-gray-600 text-gray-300 px-4 py-3 rounded-lg bg-dark-border"
+                  >
+                    <span className="text-sm">Manual: {email}</span>
+                    <motion.button
+                      onClick={copyEmailToClipboard}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="p-1 hover:bg-accent rounded transition-colors duration-300"
+                      title={emailCopied ? "Copied!" : "Copy email"}
+                    >
+                      {emailCopied ? (
+                        <Check className="text-green-400" size={16} />
+                      ) : (
+                        <Copy className="text-gray-400 hover:text-white" size={16} />
+                      )}
+                    </motion.button>
+                  </motion.div>
                 </div>
                 
-                {/* Email troubleshooting note */}
-                <div className="mt-4 p-3 bg-dark-border rounded-lg">
-                  <p className="text-xs text-gray-400">
-                    💡 Email not opening? Try the copy button ({emailCopied ? '✓ Copied!' : '📋'}) next to my email address above, or email me directly at {email}
-                  </p>
-                </div>
+                {/* Status indicator */}
+                {emailCopied && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-4 p-2 bg-green-900/30 border border-green-500 rounded-lg"
+                  >
+                    <p className="text-green-400 text-sm text-center">✓ Email copied to clipboard!</p>
+                  </motion.div>
+                )}
               </div>
 
               <div className="bg-dark-card p-6 rounded-xl border border-dark-border">
@@ -222,7 +308,7 @@ const Contact = () => {
                 </div>
                 <p className="text-gray-400 text-sm">
                   Currently seeking software engineering internships and collaborative projects. 
-                  Graduating May 2025.
+                  Graduated May 2025.
                 </p>
               </div>
             </motion.div>
