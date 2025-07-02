@@ -96,7 +96,6 @@ The website is fully responsive with breakpoints for:
 ## 📧 Contact
 
 - **Email**: nicholashbrezinski@gmail.com
-- **Phone**: +1 (617) 402-0897
 - **Website**: [nickbrezinski.com](https://nickbrezinski.com)
 - **LinkedIn**: [nicholas-brezinski](https://linkedin.com/in/nicholas-brezinski)
 - **GitHub**: [nickbrezinski](https://github.com/nickbrezinski)
