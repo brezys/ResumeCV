@@ -206,23 +206,27 @@ const Contact = () => {
 
             {/* Call to Action */}
             <motion.div variants={itemVariants} className="space-y-8">
-              <div className="bg-gradient-to-br from-dark-card to-dark-border p-8 rounded-xl border border-dark-border">
-                <h3 className="text-2xl font-semibold mb-4">Are you looking for an intern?</h3>
-                <p className="text-gray-300 leading-relaxed">
-                  I'm actively seeking software engineering internship opportunities and would love to contribute to meaningful projects.
-                </p>
+              <div className="bg-gradient-to-br from-dark-card to-dark-border p-8 rounded-xl border border-dark-border h-fit">
+                <h3 className="text-2xl font-semibold mb-6">Are you looking for an intern?</h3>
+                <div className="space-y-4">
+                  <p className="text-gray-300 leading-relaxed">
+                    I'm actively seeking software engineering internship opportunities and would love to contribute to meaningful projects.
+                  </p>
+                </div>
               </div>
 
-              <div className="bg-dark-card p-6 rounded-xl border border-dark-border">
-                <h4 className="text-lg font-semibold mb-3">Current Status</h4>
-                <div className="flex items-center space-x-2 mb-3">
-                  <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                  <span className="text-green-400 font-medium">Available for Opportunities</span>
+              <div className="bg-dark-card p-6 rounded-xl border border-dark-border h-fit">
+                <h4 className="text-2xl font-semibold mb-6">Current Status</h4>
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                    <span className="text-green-400 font-medium">Available for Opportunities</span>
+                  </div>
+                  <p className="text-gray-400 text-sm">
+                    Currently seeking software engineering opportunities and collaborative projects. 
+                    Graduated May 2025.
+                  </p>
                 </div>
-                <p className="text-gray-400 text-sm">
-                  Currently seeking software engineering opportunities and collaborative projects. 
-                  Graduated May 2025.
-                </p>
               </div>
             </motion.div>
           </div>
