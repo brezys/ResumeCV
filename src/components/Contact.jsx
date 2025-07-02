@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { Mail, Phone, MapPin, Github, Linkedin, Globe, ArrowUpRight, Copy, Check, ExternalLink } from 'lucide-react'
+import { Mail, Github, Linkedin, Globe, Copy, Check, ExternalLink } from 'lucide-react'
 
 const Contact = () => {
   const [ref, inView] = useInView({
@@ -10,13 +10,8 @@ const Contact = () => {
   })
 
   const [emailCopied, setEmailCopied] = useState(false)
-  const [emailClickFeedback, setEmailClickFeedback] = useState('')
 
   const email = "nicholashbrezinski@gmail.com"
-  const subject = "Hello from your portfolio website!"
-  const body = "Hi Nicholas,\n\nI found your portfolio website and would love to connect about potential opportunities.\n\nBest regards,"
-  
-  const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
 
   const copyEmailToClipboard = async (e) => {
     e.preventDefault()
@@ -47,40 +42,13 @@ const Contact = () => {
         setTimeout(() => setEmailCopied(false), 2000)
       } catch (err) {
         console.error('Fallback copy failed:', err)
-        // Show the email in an alert as last resort
         alert(`Copy this email address: ${email}`)
       } finally {
         document.body.removeChild(textArea)
       }
     } catch (err) {
       console.error('Failed to copy email:', err)
-      // Show the email in an alert as last resort
       alert(`Copy this email address: ${email}`)
-    }
-  }
-
-  const handleEmailClick = (e) => {
-    e.preventDefault()
-    
-    try {
-      // Try to open mailto link
-      const link = document.createElement('a')
-      link.href = mailtoUrl
-      link.click()
-      
-      // Provide user feedback
-      setEmailClickFeedback('Trying to open your email client...')
-      setTimeout(() => {
-        setEmailClickFeedback('No email client? Copy the email address above!')
-      }, 3000)
-      setTimeout(() => {
-        setEmailClickFeedback('')
-      }, 8000)
-      
-    } catch (err) {
-      console.error('Email click failed:', err)
-      setEmailClickFeedback('Please copy the email address and paste it into your email client')
-      setTimeout(() => setEmailClickFeedback(''), 5000)
     }
   }
 
@@ -89,8 +57,7 @@ const Contact = () => {
       icon: <Mail className="text-accent" size={24} />,
       label: "Email",
       value: email,
-      href: mailtoUrl,
-      onClick: handleEmailClick
+      copyable: true
     },
     {
       icon: <Globe className="text-accent" size={24} />,
@@ -159,52 +126,54 @@ const Contact = () => {
                 <div className="space-y-4">
                   {contactInfo.map((contact, index) => (
                     <div key={index} className="relative">
-                      <motion.a
-                        href={contact.href}
-                        onClick={contact.onClick}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="flex items-center space-x-4 p-4 bg-dark-card rounded-xl border border-dark-border hover:border-accent transition-all duration-300 group card-glow cursor-pointer"
-                      >
-                        {contact.icon}
-                        <div className="flex-1">
-                          <p className="text-sm text-gray-400">{contact.label}</p>
-                          <p className="text-white group-hover:text-accent transition-colors duration-300">
-                            {contact.value}
-                          </p>
-                        </div>
-                        <ArrowUpRight className="text-gray-400 group-hover:text-accent transition-colors duration-300" size={16} />
-                      </motion.a>
-                      
-                      {/* Copy button for email */}
-                      {contact.label === "Email" && (
-                        <motion.button
-                          onClick={copyEmailToClipboard}
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          className="absolute top-2 right-10 p-2 bg-dark-border hover:bg-accent rounded-lg transition-colors duration-300 group"
-                          title={emailCopied ? "Email copied!" : "Copy email address"}
+                      {contact.copyable ? (
+                        <motion.div
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="flex items-center space-x-4 p-4 bg-dark-card rounded-xl border border-dark-border hover:border-accent transition-all duration-300 group card-glow"
                         >
-                          {emailCopied ? (
-                            <Check className="text-green-400" size={16} />
-                          ) : (
-                            <Copy className="text-gray-400 group-hover:text-white" size={16} />
-                          )}
-                        </motion.button>
+                          {contact.icon}
+                          <div className="flex-1">
+                            <p className="text-sm text-gray-400">{contact.label}</p>
+                            <p className="text-white group-hover:text-accent transition-colors duration-300">
+                              {contact.value}
+                            </p>
+                          </div>
+                          <motion.button
+                            onClick={copyEmailToClipboard}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="p-2 bg-accent hover:bg-accent-hover rounded-lg transition-colors duration-300"
+                            title={emailCopied ? "Email copied!" : "Copy email address"}
+                          >
+                            {emailCopied ? (
+                              <Check className="text-white" size={20} />
+                            ) : (
+                              <Copy className="text-white" size={20} />
+                            )}
+                          </motion.button>
+                        </motion.div>
+                      ) : (
+                        <motion.a
+                          href={contact.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="flex items-center space-x-4 p-4 bg-dark-card rounded-xl border border-dark-border hover:border-accent transition-all duration-300 group card-glow cursor-pointer"
+                        >
+                          {contact.icon}
+                          <div className="flex-1">
+                            <p className="text-sm text-gray-400">{contact.label}</p>
+                            <p className="text-white group-hover:text-accent transition-colors duration-300">
+                              {contact.value}
+                            </p>
+                          </div>
+                          <ExternalLink className="text-gray-400 group-hover:text-accent transition-colors duration-300" size={16} />
+                        </motion.a>
                       )}
                     </div>
                   ))}
-                  
-                  {/* Email feedback */}
-                  {emailClickFeedback && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="p-3 bg-accent/20 border border-accent rounded-lg"
-                    >
-                      <p className="text-accent text-sm">{emailClickFeedback}</p>
-                    </motion.div>
-                  )}
                 </div>
               </div>
 
@@ -228,7 +197,7 @@ const Contact = () => {
                         </p>
                         <p className="text-sm text-gray-400">{social.description}</p>
                       </div>
-                      <ArrowUpRight className="text-gray-400 group-hover:text-accent transition-colors duration-300 ml-auto" size={16} />
+                      <ExternalLink className="text-gray-400 group-hover:text-accent transition-colors duration-300 ml-auto" size={16} />
                     </motion.a>
                   ))}
                 </div>
@@ -240,18 +209,29 @@ const Contact = () => {
               <div className="bg-gradient-to-br from-dark-card to-dark-border p-8 rounded-xl border border-dark-border">
                 <h3 className="text-2xl font-semibold mb-4">Ready to Work Together?</h3>
                 <p className="text-gray-300 mb-6 leading-relaxed">
-                  Whether you're looking for a software engineering intern, a collaborator on an exciting project, 
+                  Whether you're looking for a software engineering professional, a collaborator on an exciting project, 
                   or just want to chat about technology and innovation, I'm always open to new opportunities and connections.
                 </p>
                 
                 <div className="space-y-4">
+                  {/* Copy Email Button */}
                   <motion.button
-                    onClick={handleEmailClick}
+                    onClick={copyEmailToClipboard}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="block w-full bg-accent hover:bg-accent-hover text-white text-center px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-accent/25"
+                    className="flex items-center justify-center space-x-2 w-full bg-accent hover:bg-accent-hover text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-accent/25"
                   >
-                    Send Me an Email
+                    {emailCopied ? (
+                      <>
+                        <Check size={20} />
+                        <span>Email Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy size={20} />
+                        <span>Copy My Email</span>
+                      </>
+                    )}
                   </motion.button>
                   
                   <motion.a
@@ -266,12 +246,9 @@ const Contact = () => {
                     <ExternalLink size={16} />
                   </motion.a>
                   
-                  {/* Manual email option */}
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    className="flex items-center justify-between w-full border border-gray-600 text-gray-300 px-4 py-3 rounded-lg bg-dark-border"
-                  >
-                    <span className="text-sm">Manual: {email}</span>
+                  {/* Email Display */}
+                  <div className="flex items-center justify-between w-full border border-gray-600 text-gray-300 px-4 py-3 rounded-lg bg-dark-border">
+                    <span className="text-sm font-mono">{email}</span>
                     <motion.button
                       onClick={copyEmailToClipboard}
                       whileHover={{ scale: 1.1 }}
@@ -285,19 +262,15 @@ const Contact = () => {
                         <Copy className="text-gray-400 hover:text-white" size={16} />
                       )}
                     </motion.button>
-                  </motion.div>
+                  </div>
                 </div>
                 
-                {/* Status indicator */}
-                {emailCopied && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-4 p-2 bg-green-900/30 border border-green-500 rounded-lg"
-                  >
-                    <p className="text-green-400 text-sm text-center">✓ Email copied to clipboard!</p>
-                  </motion.div>
-                )}
+                {/* Instruction note */}
+                <div className="mt-4 p-3 bg-dark-border rounded-lg">
+                  <p className="text-xs text-gray-400 text-center">
+                    💡 Click any copy button above, then paste the email into your preferred email client
+                  </p>
+                </div>
               </div>
 
               <div className="bg-dark-card p-6 rounded-xl border border-dark-border">
@@ -307,7 +280,7 @@ const Contact = () => {
                   <span className="text-green-400 font-medium">Available for Opportunities</span>
                 </div>
                 <p className="text-gray-400 text-sm">
-                  Currently seeking software engineering internships and collaborative projects. 
+                  Currently seeking software engineering opportunities and collaborative projects. 
                   Graduated May 2025.
                 </p>
               </div>
