@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { Mail, Phone, MapPin, Github, Linkedin, Globe, ArrowUpRight } from 'lucide-react'
+import { Mail, Phone, MapPin, Github, Linkedin, Globe, ArrowUpRight, Copy, Check } from 'lucide-react'
 
 const Contact = () => {
   const [ref, inView] = useInView({
@@ -9,12 +9,38 @@ const Contact = () => {
     threshold: 0.1
   })
 
+  const [emailCopied, setEmailCopied] = useState(false)
+
+  const email = "nicholashbrezinski@gmail.com"
+  const subject = "Hello from your portfolio website!"
+  const body = "Hi Nicholas,\n\nI found your portfolio website and would love to connect about potential opportunities.\n\nBest regards,"
+  
+  const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+
+  const copyEmailToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(email)
+      setEmailCopied(true)
+      setTimeout(() => setEmailCopied(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy email:', err)
+    }
+  }
+
+  const handleEmailClick = (e) => {
+    // Try to open default email client
+    window.location.href = mailtoUrl
+    
+    // If that doesn't work, the user can use the copy button as fallback
+  }
+
   const contactInfo = [
     {
       icon: <Mail className="text-accent" size={24} />,
       label: "Email",
-      value: "nicholashbrezinski@gmail.com",
-      href: "mailto:nicholashbrezinski@gmail.com"
+      value: email,
+      href: mailtoUrl,
+      onClick: handleEmailClick
     },
     {
       icon: <Globe className="text-accent" size={24} />,
@@ -82,22 +108,41 @@ const Contact = () => {
                 <h3 className="text-2xl font-semibold mb-6">Get In Touch</h3>
                 <div className="space-y-4">
                   {contactInfo.map((contact, index) => (
-                    <motion.a
-                      key={index}
-                      href={contact.href}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="flex items-center space-x-4 p-4 bg-dark-card rounded-xl border border-dark-border hover:border-accent transition-all duration-300 group card-glow"
-                    >
-                      {contact.icon}
-                      <div>
-                        <p className="text-sm text-gray-400">{contact.label}</p>
-                        <p className="text-white group-hover:text-accent transition-colors duration-300">
-                          {contact.value}
-                        </p>
-                      </div>
-                      <ArrowUpRight className="text-gray-400 group-hover:text-accent transition-colors duration-300 ml-auto" size={16} />
-                    </motion.a>
+                    <div key={index} className="relative">
+                      <motion.a
+                        href={contact.href}
+                        onClick={contact.onClick}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="flex items-center space-x-4 p-4 bg-dark-card rounded-xl border border-dark-border hover:border-accent transition-all duration-300 group card-glow"
+                      >
+                        {contact.icon}
+                        <div className="flex-1">
+                          <p className="text-sm text-gray-400">{contact.label}</p>
+                          <p className="text-white group-hover:text-accent transition-colors duration-300">
+                            {contact.value}
+                          </p>
+                        </div>
+                        <ArrowUpRight className="text-gray-400 group-hover:text-accent transition-colors duration-300" size={16} />
+                      </motion.a>
+                      
+                      {/* Copy button for email */}
+                      {contact.label === "Email" && (
+                        <motion.button
+                          onClick={copyEmailToClipboard}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          className="absolute top-2 right-2 p-2 bg-dark-border hover:bg-accent rounded-lg transition-colors duration-300 group"
+                          title="Copy email address"
+                        >
+                          {emailCopied ? (
+                            <Check className="text-green-400" size={16} />
+                          ) : (
+                            <Copy className="text-gray-400 group-hover:text-white" size={16} />
+                          )}
+                        </motion.button>
+                      )}
+                    </div>
                   ))}
                 </div>
               </div>
@@ -140,7 +185,8 @@ const Contact = () => {
                 
                 <div className="space-y-4">
                   <motion.a
-                    href="mailto:nicholashbrezinski@gmail.com"
+                    href={mailtoUrl}
+                    onClick={handleEmailClick}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="block w-full bg-accent hover:bg-accent-hover text-white text-center px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-accent/25"
@@ -158,6 +204,13 @@ const Contact = () => {
                   >
                     Connect on LinkedIn
                   </motion.a>
+                </div>
+                
+                {/* Email troubleshooting note */}
+                <div className="mt-4 p-3 bg-dark-border rounded-lg">
+                  <p className="text-xs text-gray-400">
+                    💡 Email not opening? Try the copy button ({emailCopied ? '✓ Copied!' : '📋'}) next to my email address above, or email me directly at {email}
+                  </p>
                 </div>
               </div>
 
