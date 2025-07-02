@@ -220,7 +220,7 @@ const Contact = () => {
                   </p>
                   
                   <motion.a
-                    href="/resumenick.pdf"
+                    href="public/images/resume.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.02 }}
