@@ -240,8 +240,6 @@ const Contact = () => {
                       <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
                       <span className="text-green-400 font-medium">Available for Opportunities</span>
                     </div>
-                    <p className="text-gray-400 text-sm">
-                    </p>
                   </div>
                 </div>
               </div>
