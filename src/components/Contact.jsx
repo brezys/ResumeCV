@@ -220,7 +220,7 @@ const Contact = () => {
                   </p>
                   
                   <motion.a
-                    href="/NICK BREZINSKI TECHNICAL RESUME.pdf"
+                    href="/resumenick.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.02 }}
