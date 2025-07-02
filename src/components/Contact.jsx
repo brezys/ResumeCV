@@ -207,70 +207,10 @@ const Contact = () => {
             {/* Call to Action */}
             <motion.div variants={itemVariants} className="space-y-8">
               <div className="bg-gradient-to-br from-dark-card to-dark-border p-8 rounded-xl border border-dark-border">
-                <h3 className="text-2xl font-semibold mb-4">Ready to Work Together?</h3>
-                <p className="text-gray-300 mb-6 leading-relaxed">
-                  Whether you're looking for a software engineering professional, a collaborator on an exciting project, 
-                  or just want to chat about technology and innovation, I'm always open to new opportunities and connections.
+                <h3 className="text-2xl font-semibold mb-4">Are you looking for an intern?</h3>
+                <p className="text-gray-300 leading-relaxed">
+                  I'm actively seeking software engineering internship opportunities and would love to contribute to meaningful projects.
                 </p>
-                
-                <div className="space-y-4">
-                  {/* Copy Email Button */}
-                  <motion.button
-                    onClick={copyEmailToClipboard}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="flex items-center justify-center space-x-2 w-full bg-accent hover:bg-accent-hover text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-accent/25"
-                  >
-                    {emailCopied ? (
-                      <>
-                        <Check size={20} />
-                        <span>Email Copied!</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy size={20} />
-                        <span>Copy My Email</span>
-                      </>
-                    )}
-                  </motion.button>
-                  
-                  <motion.a
-                    href="https://linkedin.com/in/nicholas-brezinski"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="flex items-center justify-center space-x-2 w-full border border-gray-600 hover:border-white text-white text-center px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:bg-white hover:text-black"
-                  >
-                    <span>Connect on LinkedIn</span>
-                    <ExternalLink size={16} />
-                  </motion.a>
-                  
-                  {/* Email Display */}
-                  <div className="flex items-center justify-between w-full border border-gray-600 text-gray-300 px-4 py-3 rounded-lg bg-dark-border">
-                    <span className="text-sm font-mono">{email}</span>
-                    <motion.button
-                      onClick={copyEmailToClipboard}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="p-1 hover:bg-accent rounded transition-colors duration-300"
-                      title={emailCopied ? "Copied!" : "Copy email"}
-                    >
-                      {emailCopied ? (
-                        <Check className="text-green-400" size={16} />
-                      ) : (
-                        <Copy className="text-gray-400 hover:text-white" size={16} />
-                      )}
-                    </motion.button>
-                  </div>
-                </div>
-                
-                {/* Instruction note */}
-                <div className="mt-4 p-3 bg-dark-border rounded-lg">
-                  <p className="text-xs text-gray-400 text-center">
-                    💡 Click any copy button above, then paste the email into your preferred email client
-                  </p>
-                </div>
               </div>
 
               <div className="bg-dark-card p-6 rounded-xl border border-dark-border">
