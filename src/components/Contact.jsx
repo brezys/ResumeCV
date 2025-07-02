@@ -216,7 +216,7 @@ const Contact = () => {
                 <h4 className="text-2xl font-semibold mb-6">My Resume & Status</h4>
                 <div className="space-y-6">
                   <p className="text-gray-300 leading-relaxed">
-                    I'm actively seeking software engineering internship opportunities and would love to contribute to meaningful projects.
+                    I'm actively seeking software engineering, internship, and other related opportunities. Would love to contribute to projects!
                   </p>
                   
                   <motion.a
@@ -241,8 +241,6 @@ const Contact = () => {
                       <span className="text-green-400 font-medium">Available for Opportunities</span>
                     </div>
                     <p className="text-gray-400 text-sm">
-                      Currently seeking software engineering opportunities and collaborative projects. 
-                      Graduated May 2025.
                     </p>
                   </div>
                 </div>
